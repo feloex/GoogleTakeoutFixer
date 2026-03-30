@@ -50,6 +50,7 @@ func Main() {
 	var ignoreAlbums bool = false
 	var monthSubfolders bool = false
 	var restoreMOVExtension bool = false
+	var dryRun bool = false
 
 	progressLabel := widget.NewLabel("Ready to start")
 	progressLabel.Truncation = fyne.TextTruncateEllipsis
@@ -110,6 +111,11 @@ func Main() {
 		fmt.Println("restore MOV extension", restoreMOVExtension)
 	})
 
+	dryRunCheckbox := widget.NewCheck("Dry run (no changes)", func(value bool) {
+		dryRun = value
+		fmt.Println("dry run", dryRun)
+	})
+
 	// Fix conflicting options
 	updateCheckboxStates := func() {
 		setEnabled := func(cb *widget.Check, enabled bool) {
@@ -154,6 +160,7 @@ func Main() {
 		monthSubfoldersCheckbox.Disable()
 		flattenCheckbox.Disable()
 		restoreMOVExtensionCheckbox.Disable()
+		dryRunCheckbox.Disable()
 
 		fixer.Log(fixer.LoggerInfo, "Processing...")
 		progressBar.SetValue(0)
@@ -171,6 +178,7 @@ func Main() {
 			IgnoreAlbums:        ignoreAlbums,
 			MonthSubfolders:     monthSubfolders,
 			RestoreMOVExtension: restoreMOVExtension,
+			DryRun:              dryRun,
 		}
 		go func() {
 			if err := fixer.Process(ctx, inputPath, outputPath, progressCh, opts); err != nil {
@@ -232,10 +240,10 @@ func Main() {
 				outputButton.Enable()
 				startButton.Enable()
 
-				// Manually re-enable restoreMOVExtensionCheckbox and writeMetadataCheckbox
-				// since they are not affected by other checboxes in updateCheckboxStates
+				// Manually re-enable checkboxes not affected by updateCheckboxStates
 				restoreMOVExtensionCheckbox.Enable()
 				writeMetadataCheckbox.Enable()
+				dryRunCheckbox.Enable()
 				// Re-enable checboxes based on current states
 				updateCheckboxStates()
 			})
@@ -319,6 +327,7 @@ func Main() {
 		monthSubfoldersCheckbox,
 		flattenCheckbox,
 		restoreMOVExtensionCheckbox,
+		dryRunCheckbox,
 	)
 
 	StartCancelRow := container.NewGridWithColumns(2, startButton, cancelButton)

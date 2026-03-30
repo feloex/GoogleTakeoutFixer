@@ -45,6 +45,7 @@ type ProcessOptions struct {
 	IgnoreAlbums        bool
 	Flatten             bool
 	RestoreMOVExtension bool // See issue #2
+	DryRun              bool
 }
 
 type FixerContext struct {
@@ -98,7 +99,7 @@ func Process(
 		return ctx.Err()
 	}
 
-	if options.WriteMetadata || options.RestoreMOVExtension {
+	if !options.DryRun && (options.WriteMetadata || options.RestoreMOVExtension) {
 		if err := InitializeExifTool(); err != nil {
 			Log(LoggerError, "Failed to initialize exiftool: %v", err)
 			return err
@@ -355,6 +356,18 @@ func CreateFixedFile(
 	destPath string,
 	isYearFolder bool,
 ) error {
+	if fixerCtx.Options.DryRun {
+		if fixerCtx.Options.UseSymlinks && !isYearFolder {
+			Log(LoggerInfo, "[dry-run] Would symlink %s -> %s", destPath, filePath)
+		} else {
+			Log(LoggerInfo, "[dry-run] Would copy %s -> %s", filePath, destPath)
+		}
+		if fixerCtx.Options.WriteMetadata && fileMetadataPath != "" {
+			Log(LoggerInfo, "[dry-run] Would apply metadata from %s", fileMetadataPath)
+		}
+		return nil
+	}
+
 	// Ensure output directory exists (create if not)
 	destDir := filepath.Dir(destPath)
 	if _, err := os.Stat(destDir); os.IsNotExist(err) {

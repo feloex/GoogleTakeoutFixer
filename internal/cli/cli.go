@@ -46,6 +46,7 @@ func Main() {
 	monthSubfolders := flag.Bool("month-subfolders", false, "Create month subfolders (1-12) inside year folders")
 	flatten := flag.Bool("flatten", false, "Put all media files directly in the output folder without year/album subfolders")
 	restoreMOV := flag.Bool("restore-mov", false, "Restore .MOV file extension in case the Major Brand EXIF field says \"Apple QuickTime (.MOV/QT)\"")
+	dryRun := flag.Bool("dry-run", false, "Log what would be done without copying or modifying any files")
 
 	flag.Parse()
 
@@ -86,6 +87,7 @@ func Main() {
 		IgnoreAlbums:        *ignoreAlbums,
 		MonthSubfolders:     *monthSubfolders,
 		RestoreMOVExtension: *restoreMOV,
+		DryRun:              *dryRun,
 	}
 
 	go func() {
