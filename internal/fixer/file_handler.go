@@ -80,19 +80,33 @@ func ClearCacheDir(dir string) {
 	delete(dirCache, dir)
 }
 
-// All media extension to differ between media files and other files
+// All media extensions to differentiate between media files and other files
 var imageExtensions = map[string]struct{}{
 	".jpg":  {},
 	".jpeg": {},
 	".png":  {},
 	".heic": {},
+	".webp": {},
+	".gif":  {},
+	".tiff": {},
+	".tif":  {},
+	".bmp":  {},
+	// RAW formats
+	".cr2": {},
+	".nef": {},
+	".arw": {},
+	".dng": {},
+	".rw2": {},
 }
 
 var videoExtensions = map[string]struct{}{
-	".mp4": {},
-	".mov": {},
-	".avi": {},
-	".mkv": {},
+	".mp4":  {},
+	".mov":  {},
+	".avi":  {},
+	".mkv":  {},
+	".webm": {},
+	".m4v":  {},
+	".3gp":  {},
 }
 
 // Checks whether a file is a video file based on its extension
