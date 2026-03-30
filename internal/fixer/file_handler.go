@@ -30,7 +30,7 @@ import (
 	"time"
 )
 
-// Cache for diectory entries to prevent excessive disk reads (issue #5)
+// Cache for directory entries to prevent excessive disk reads (issue #5)
 var (
 	dirCache     = make(map[string][]os.DirEntry)
 	dirCacheLock sync.RWMutex
