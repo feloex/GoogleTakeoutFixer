@@ -82,9 +82,45 @@ func ClearCacheDir(dir string) {
 }
 
 // All media extension to differ between media files and other files
-var imageExtensions = []string{".jpg", ".jpeg", ".png", ".heic"}
+// I could image that google does some renaming like with .mov (see issue #2)
+var imageExtensions = []string{
+	".jpg",
+	".jpeg",
+	".png",
+	".gif",
+	".webp",
+	".bmp",
+	".arw",
+	".cr2",
+	".cr3",
+	".tif",
+	".tiff",
+	".heic",
+	".heif",
+	".dng",
+	".raf",
+	".rw2",
+	".srw",
+	".nef",
+	".nrw",
+	".orf",
+}
 
-var videoExtensions = []string{".mp4", ".mov", ".avi", ".mkv"}
+var videoExtensions = []string{
+	".mp4",
+	".m4v",
+	".mov",
+	".mpeg",
+	".m2ts",
+	".webm",
+	".wmv",
+	".avi",
+	".mkv",
+	".3gp",
+	".3g2",
+	".mpg",
+	".mts",
+}
 
 // Checks whether a file is a video file based on its extension
 func IsVideoFile(path string) bool {
